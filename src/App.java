@@ -141,7 +141,7 @@ public class App {
             }
             else if(e==5){
                 others o = new others();
-                System.out.println("Enter the details! for example 'vegetables'");
+                System.out.println("Enter the details! for example 'Stationery'");
                 String s = sc.next();
                 o.mention = s;
                 System.out.println("Enter the Expense");

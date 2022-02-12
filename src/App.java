@@ -32,7 +32,7 @@ public class App {
         ArrayList<bills> bList = new ArrayList<>();
         ArrayList<others> oList = new ArrayList<>();
     }
-    static ArrayList<month> mList = new ArrayList<>();
+    static month []mList = new month[12];
     static int budgetleft;
     static int sum;
     static int choice;
@@ -46,7 +46,7 @@ public class App {
     public static void mainframe() {
         Scanner sc = new Scanner(System.in);
         while(true){
-            System.out.println("1.SELECT THE CURRENT MONTH");
+            System.out.println("1.SELECT THE MONTH TO ADD EXPENSE");
             System.out.println("2.GET YOUR EXPENSE REPORT");
             System.out.println("3.EXIT");
             choice = sc.nextInt();
@@ -160,15 +160,12 @@ public class App {
             }
         }
         q.spent = sum;
-        mList.add(m-1,q);
+        mList[m-1] = q;
     }
     public static void calculate() {
         Scanner sc = new Scanner(System.in);
         System.out.println("Welcome to Expense Report Portal");
         System.out.println("Choose from the services below:");
-        System.out.println("1.Month-wise Expense Report");
-        System.out.println("2.Total Expense Report");
-        System.out.println("3. Go to Main Dashboard!");
         while(true){
             System.out.println("1.Month-wise Expense Report");
             System.out.println("2.Total Expense Report");
@@ -207,11 +204,91 @@ public class App {
         }
     }
     public static void report(int m) {
-        month q = mList.get(m-1);
+        Scanner sc = new Scanner(System.in);
+        month q = mList[m-1];
+        if(q==null){
+            System.out.println("no expense added for this month");
+            return;
+        }
         String s = months[m-1];
         System.out.println("Your total Expense in "+s+"is "+q.spent);
+        while(true){
+            System.out.println("Choose your criteria to get this month's expense in that criteria");
+            System.out.println("1.Food");
+            System.out.println("2.Entertainment");
+            System.out.println("3.Household and Groceries");
+            System.out.println("4.Bills");
+            System.out.println("5.Others");
+            System.out.println("6.Press 0 to go Back");
+            int n = sc.nextInt();
+            if(n==0){
+                break;
+            }
+            else if(n>=1 && n<=5){
+                criteriareport(n,m);
+            }
+            else{
+                System.out.println("Please Enter Correct Choice");
+            }
+        }
+    }
+    public static void criteriareport(int n, int m) {
+        month q = mList[m-1];
+        int fsum = 0;
+        int esum = 0;
+        int hsum = 0;
+        int bsum = 0;
+        int osum = 0;
+        if(n==1){
+            System.out.println("Your Expenses on Food in this Month:");
+            for(int i=0;i<q.fList.size();i++){
+                fsum = fsum+q.fList.get(i).amount;
+                System.out.println(q.fList.get(i).foodname+" "+q.fList.get(i).amount);
+            }
+            System.out.println("Total Expense on food in this month "+fsum);
+        }
+        if(n==2){
+            System.out.println("Your Expenses on Entertainment in this Month:");
+            for(int i=0;i<q.eList.size();i++){
+                esum = esum+q.eList.get(i).amount;
+                System.out.println(q.eList.get(i).purpose+" "+q.eList.get(i).amount);
+            }
+            System.out.println("Total Expense on entertainment in this month "+esum);
+        }
+        if(n==3){
+            System.out.println("Your Expenses on Household and Groceries in this Month:");
+            for(int i=0;i<q.hList.size();i++){
+                hsum = hsum+q.hList.get(i).amount;
+                System.out.println(q.hList.get(i).item+" "+q.hList.get(i).amount);
+            }
+            System.out.println("Total Expense on household and groceries in this month "+hsum);
+        }
+        if(n==4){
+            System.out.println("Your Expenses on Bills in this Month:");
+            for(int i=0;i<q.bList.size();i++){
+                bsum = bsum+q.bList.get(i).amount;
+                System.out.println(q.bList.get(i).type+" "+q.bList.get(i).amount);
+            }
+            System.out.println("Total Expense on bills in this month "+bsum);
+        }
+        if(n==5){
+            System.out.println("Your Other Expenses in this Month:");
+            for(int i=0;i<q.oList.size();i++){
+                osum = osum+q.oList.get(i).amount;
+                System.out.println(q.oList.get(i).mention+" "+q.oList.get(i).amount);
+            }
+            System.out.println("Total other expenses in this month "+osum);
+        }
     }
     public static void totalreport() {
-        
+        int totalspent = 0;
+        for(int i=0;i<12;i++){
+            if(mList[i]==null) continue;
+            else{
+                month q = mList[i];
+                totalspent = totalspent + q.spent;
+            }
+        }
+        System.out.println("Your expenses till date: "+ totalspent);
     }
 }
